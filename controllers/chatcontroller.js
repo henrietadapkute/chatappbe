@@ -1,5 +1,5 @@
-const Chat = require('../models/Chat')
-const Message = require('../models/Message')
+import Chat from '../models/Chat.js'
+import Message from'../models/Message.js'
 
 async function createChat(req, res) {
     try {
@@ -43,7 +43,7 @@ async function deleteChat(req, res) {
 
 }
 
-module.exports = {
+export default {
     createChat,
     getChatsbyUser,
     getMessages,
