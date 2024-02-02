@@ -1,4 +1,4 @@
-const User = require('../models/User')
+import User from '../models/User.js'
 
 async function getUserProfile(req, res) {
     try {
@@ -22,7 +22,7 @@ async function deleteUser(req, res) {
 
 }
 
-module.exports = {
+export default {
     getUserProfile,
     updateUserProfile,
     deleteUser

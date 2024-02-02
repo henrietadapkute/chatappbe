@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt'
+
+const SALT_ROUNDS = 6
 
 const userSchema = new mongoose.Schema({
     username: {

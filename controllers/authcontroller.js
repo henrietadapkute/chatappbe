@@ -1,19 +1,15 @@
-const jwt = require('jsonwebtoken')
-const User = require('../models/User')
-const bcrypt = require('bcrypt')
-
-module.exports = {
-    create,
-    login,
-    checkToken
-}
+import jwt from 'jsonwebtoken'
+import User from '../models/User.js'
+import bcrypt from 'bcrypt'
 
 async function create(req, res) {
     try {
+       console.log('Hi')
         const user = await User.create(req.body)
+         console.log(user)
         const token = createJWT(user)
-        res.json(token)
-    } catch(error) {
+        res.status(202).json(token)
+    } catch(err) {
         res.status(400).json(err)
     }
 }
@@ -42,4 +38,10 @@ function createJWT(user) {
         process.env.SECRET,
         { expiresIn: '24h' }
     )
+}
+
+export default {
+    create,
+    login,
+    checkToken
 }
