@@ -6,7 +6,7 @@ import './config/database.js'
 import bodyParser from 'body-parser'
 import checkToken from './config/checkToken.js'
 import { userRouter } from './routes/api/usersRoute.js'
-import { chatRouter } from './routes/chatsRoute.js'
+import { chatRouter } from './routes/api/chatsRoute.js'
 
 const app = express()
 
@@ -18,11 +18,11 @@ app.use(checkToken)
 const port = process.env.PORT || 4000
 // USERS API
 app.use('/api/users', userRouter)
-
 app.use('/api/chats', chatRouter)
 
 app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+  console.log(res, req)
+  // res.sendFile(path.join(__dirname, 'build', 'index.html'))
 }); 
 
 app.listen(port, () => {
