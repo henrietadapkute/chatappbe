@@ -4,6 +4,7 @@ import chatcontroller from '../controllers/chatcontroller.js'
 const router = express.Router()
 
 router.get('/', chatcontroller.getChatsbyUser)
+router.get('/previews', chatcontroller.getPreviews)
 router.get('/:chatId/messages', chatcontroller.getMessages)
 
 // This should be the route
