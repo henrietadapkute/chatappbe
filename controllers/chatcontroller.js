@@ -4,12 +4,15 @@ import Message from'../models/Message.js'
 
 async function createChat(req, res) {
     try {
-        const { participants } = req.body
-        const chat = new Chat({ participants, chatType: "private" })
+        const userId = req.user._id
+        let { participants } = req.body
+        participants = [participants, userId]
+        console.log(participants)
+        const chat = new Chat({ participants: participants, chatType: "private" })
         await chat.save()
         res.status(200).json(chat)
     } catch (error) {
-    res.status(500).json({message: 'Server error', error: error.message })
+    res.status(500)//.json({message: 'Server error', error: error.message })
     }
 }
 
@@ -25,7 +28,6 @@ async function getChatsbyUser(req, res) {
 }
 
 async function searchUserbyUsername(req,res) {
-    console.log(req, res)
     try {
         const {username} = req.query
         const user = await User.findOne({ username })
