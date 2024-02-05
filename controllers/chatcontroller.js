@@ -67,7 +67,7 @@ async function getPreviews(req, res) {
 async function getMessages(req, res) {
   try {
     const chatId = req.params.chatId
-    const messages = await Message.find({ chat: chatId })
+    const messages = await Message.find({ chatId: chatId })
     res.json(messages)
 } catch (error) {
      res.status(500).json({message: 'Server error', error: error.message })  
