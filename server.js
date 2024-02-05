@@ -6,7 +6,11 @@ import './config/database.js'
 import bodyParser from 'body-parser'
 import checkToken from './config/checkToken.js'
 import { userRouter } from './routes/api/usersRoute.js'
+<<<<<<< Updated upstream
 import { chatRouter } from './routes/chatsRoute.js'
+=======
+import { chatsRouter } from './routes/chatsRoute.js'
+>>>>>>> Stashed changes
 
 const app = express()
 
@@ -18,6 +22,7 @@ app.use(checkToken)
 const port = process.env.PORT || 4000
 // USERS API
 app.use('/api/users', userRouter)
+app.use('/chats', chatsRouter)
 
 app.use('/api/chats', chatRouter)
 
