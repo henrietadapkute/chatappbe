@@ -18,15 +18,13 @@ app.use(checkToken)
 const port = process.env.PORT || 4000
 // USERS API
 app.use('/api/users', userRouter)
-
 app.use('/api/chats', chatRouter)
 
-app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'))
-}); 
+// app.get('/*', function(req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'))
+// }); 
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`)
 });
-
 
