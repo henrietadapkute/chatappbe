@@ -1,5 +1,6 @@
 import Chat from '../models/Chat.js'
 import Message from'../models/Message.js'
+import User from '../models/User.js'
 
 async function createChat(req, res) {
     try {
@@ -20,6 +21,31 @@ async function getChatsbyUser(req, res) {
         res.json(chats)
     } catch (error) {
      res.status(500).json({message: 'Server error', error: error.message })    
+    }
+}
+
+async function getPreviews(req, res) {
+    try {
+        const userId = req.user._id
+        const chats = await Chat.find({ participants: { $in: [userId] } })
+        const previews = await Promise.all(chats.map(async (chat) => {
+            const latestMessage = await Message.findOne({chatId : chat._id}).sort({timestamp: -1}).exec()
+            let otherParticipant = null
+            if(chat.chatType !== 'group') {
+                const otherParticipantId = chat.participants.find(id => id.toString() !== userId)
+                otherParticipant = await User.findById(otherParticipantId)
+            }
+            return {
+                chatId: chat._id,
+                latestMessage,
+                otherParticipant
+            }
+        }))
+        res.json(previews)
+    } catch (err) {
+
+        console.log(err)
+        res.status(500).send('Error fetching chat previews')
     }
 }
 
@@ -47,6 +73,7 @@ async function deleteChat(req, res) {
 export default {
     createChat,
     getChatsbyUser,
+    getPreviews,
     getMessages,
     sendMessage,
     messageRead,
