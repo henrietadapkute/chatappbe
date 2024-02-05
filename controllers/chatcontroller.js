@@ -1,6 +1,7 @@
 import Chat from '../models/Chat.js'
 import User from '../models/User.js'
 import Message from'../models/Message.js'
+import User from '../models/User.js'
 
 async function createChat(req, res) {
     try {
@@ -15,8 +16,9 @@ async function createChat(req, res) {
 
 async function getChatsbyUser(req, res) {
     try {
-        const userId = req.params.userId
-        const chats = await Chat.find({ participants: { $in: [userId]} })
+        const user = req.user
+        console.log(user)
+        const chats = await Chat.find({ participants: { $in: [user._id] } })
         res.json(chats)
     } catch (error) {
      res.status(500).json({message: 'Server error', error: error.message })    
@@ -36,6 +38,30 @@ async function searchUserbyUsername(req,res) {
     } catch (error) {
     res.status(500).json({message: 'Server error', error: error.message })    
 }
+}
+async function getPreviews(req, res) {
+    try {
+        const userId = req.user._id
+        const chats = await Chat.find({ participants: { $in: [userId] } })
+        const previews = await Promise.all(chats.map(async (chat) => {
+            const latestMessage = await Message.findOne({chatId : chat._id}).sort({timestamp: -1}).exec()
+            let otherParticipant = null
+            if(chat.chatType !== 'group') {
+                const otherParticipantId = chat.participants.find(id => id.toString() !== userId)
+                otherParticipant = await User.findById(otherParticipantId)
+            }
+            return {
+                chatId: chat._id,
+                latestMessage,
+                otherParticipant
+            }
+        }))
+        res.json(previews)
+    } catch (err) {
+
+        console.log(err)
+        res.status(500).send('Error fetching chat previews')
+    }
 }
 
 async function getMessages(req, res) {
@@ -63,6 +89,7 @@ export default {
     createChat,
     getChatsbyUser,
     searchUserbyUsername,
+    getPreviews,
     getMessages,
     sendMessage,
     messageRead,

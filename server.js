@@ -20,13 +20,18 @@ const port = process.env.PORT || 4000
 app.use('/api/users', userRouter)
 app.use('/api/chats', chatRouter)
 
+<<<<<<< HEAD
 app.get('/*', function(req, res) {
   console.log(res, req)
   // res.sendFile(path.join(__dirname, 'build', 'index.html'))
 }); 
+=======
+// app.get('/*', function(req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'))
+// }); 
+>>>>>>> 89077f0f029a2575ee5d29bebd74da1fdb180f7d
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`)
 });
-
 
