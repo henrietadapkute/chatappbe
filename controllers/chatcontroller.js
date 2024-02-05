@@ -15,6 +15,7 @@ async function createChat(req, res) {
 async function getChatsbyUser(req, res) {
     try {
         const user = req.user
+        console.log(user)
         const chats = await Chat.find({ participants: { $in: [user._id] } })
         res.json(chats)
     } catch (error) {
