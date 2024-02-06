@@ -81,7 +81,15 @@ async function getPreviews(req, res) {
 
 async function getMessages(req, res) {
   try {
+    const userId = req.user._id
+
     const chatId = req.params.chatId
+
+    await Message.updateMany(
+        {chatId: chatId, senderId: { $ne: userId } },
+        {$addToSet: { readBy: userId } }
+    )
+
     const messages = await Message.find({ chatId: chatId })
     console.log(chatId, messages)
     res.json(messages)
