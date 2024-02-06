@@ -12,6 +12,7 @@ async function create(req, res) {
             chatId: chatId,
             senderId: userId,
             content: req.body.content,
+            readBy: [],
             timestamp: new Date()
         })
         await message.save()
