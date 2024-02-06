@@ -1,15 +1,21 @@
 import Chat from '../models/Chat.js'
 import User from '../models/User.js'
 import Message from'../models/Message.js'
+import GroupInformation from '../models/GroupInformation.js'
 
 async function createChat(req, res) {
     try {
         const userId = req.user._id
         let { participants } = req.body
-        participants = [participants, userId]
-        console.log(participants)
-        const chat = new Chat({ participants: participants, chatType: "private" })
+        participants = [...participants, userId]
+        let chatType = "private"
+        if (participants.length > 2) chatType = "group"
+        const chat = new Chat({ participants: participants, chatType: chatType })
         await chat.save()
+        if (chatType === "group") {
+            const group = new GroupInformation({chatId: chat._id, adminId: userId, groupName: `${req.user.username}'s Group`})
+            await group.save()
+        }
         res.status(200).json(chat)
     } catch (error) {
     res.status(500).json({message: 'Server error', error: error.message })
@@ -44,19 +50,27 @@ async function getPreviews(req, res) {
     try {
         const userId = req.user._id
         const chats = await Chat.find({ participants: { $in: [userId] } })
-        const previews = await Promise.all(chats.map(async (chat) => {
+        let previews = await Promise.all(chats.map(async (chat) => {
             const latestMessage = await Message.findOne({chatId : chat._id}).sort({timestamp: -1}).exec()
             let otherParticipant = null
             if(chat.chatType !== 'group') {
                 const otherParticipantId = chat.participants.find(id => id.toString() !== userId)
                 otherParticipant = await User.findById(otherParticipantId)
+            } else {
+                otherParticipant = await GroupInformation.find({chatId: chat._id})
             }
             return {
                 chatId: chat._id,
+                chatType: chat.chatType,
                 latestMessage,
                 otherParticipant
             }
         }))
+        previews = previews.sort((a, b) => {
+            const dateA = a.latestMessage ? new Date(a.latestMessage.timestamp) : new Date(0);
+            const dateB = b.latestMessage ? new Date(b.latestMessage.timestamp) : new Date(0);
+            return dateB - dateA; 
+        });
         res.json(previews)
     } catch (err) {
 
