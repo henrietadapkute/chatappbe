@@ -84,7 +84,29 @@ async function messageRead(req, res) {
 
 }
 async function deleteChat(req, res) {
+  try {
+    const userId = req.user._id
+    const chatId = req.params.chatId
+    const chat = await Chat.findByIdAndDelete(chatId)
+    const message = await Message.deleteMany({ chatId: chatId })
+    console.log(chat)
+    // const messages = await Message.find({ chatId })
+    // console.log(messages)
+    // if (!chat) {
+    //   return res.status(404).json({ message: 'Chat not found' })
+    // }
 
+    // if (!chat.participants.includes(userId)) {
+    //   return res.status(403).json({ message: 'Cannot delete chat' })
+    // }
+
+    // await chat.remove();
+    // await Message.deleteMany({ chatId })
+
+    res.json({ message: 'Chat deleted' })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
 }
 
 export default {

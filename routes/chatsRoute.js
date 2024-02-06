@@ -17,4 +17,6 @@ router.post('/', chatcontroller.createChat)
 router.post('/create', chatcontroller.createChat)
 router.post('/create/chat', chatcontroller.createChat)
 
+router.delete('/:chatId', chatcontroller.deleteChat)
+
 export const chatRouter = router
