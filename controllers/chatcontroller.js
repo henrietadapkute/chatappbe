@@ -12,7 +12,7 @@ async function createChat(req, res) {
         await chat.save()
         res.status(200).json(chat)
     } catch (error) {
-    res.status(500)//.json({message: 'Server error', error: error.message })
+    res.status(500).json({message: 'Server error', error: error.message })
     }
 }
 
@@ -69,6 +69,7 @@ async function getMessages(req, res) {
   try {
     const chatId = req.params.chatId
     const messages = await Message.find({ chatId: chatId })
+    console.log(chatId, messages)
     res.json(messages)
 } catch (error) {
      res.status(500).json({message: 'Server error', error: error.message })  
