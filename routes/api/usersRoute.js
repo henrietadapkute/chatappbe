@@ -26,4 +26,6 @@ router.get("/user", ensureLoggedIn, (req, res) => {
 router.post("/", usersCtrl.create);
 router.post("/login", usersCtrl.login);
 
+router.put('/:userId', userProfile.updateUserProfile)
+
 export const userRouter = router;
