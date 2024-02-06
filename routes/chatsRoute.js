@@ -1,5 +1,6 @@
 import express from 'express';
 import chatcontroller from '../controllers/chatcontroller.js'
+import messagecontroller from '../controllers/messagecontroller.js'
 
 const router = express.Router()
 
@@ -8,6 +9,7 @@ router.get('/chats/user/:userId', chatcontroller.getChatsbyUser)
 router.get('/previews', chatcontroller.getPreviews)
 router.get('/search/user', chatcontroller.searchUserbyUsername)
 router.get('/:chatId/messages', chatcontroller.getMessages)
+router.post('/:chatId/messages', messagecontroller.create)
 
 // This should be the route
 router.post('/', chatcontroller.createChat)
