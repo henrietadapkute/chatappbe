@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt'
+
+const SALT_ROUNDS = 6
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -9,6 +12,12 @@ const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
         trim: true
+    },
+    email: {
+        type: String,
+        trim: true,
+        unique: true,
+        required: true
     },
     password: {
         type: String,
