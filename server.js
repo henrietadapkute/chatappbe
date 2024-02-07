@@ -35,6 +35,11 @@ io.on("connection", (socket) => {
   socket.on("send_message", (data) => {
     socket.to(data.chatId).emit("receive_message", data)
   }) 
+
+  socket.on("disconnect", () => {
+    console.log(`User Disconnected: ${socket.id}`)
+    socket.broadcast.emit('user_disconnected', { userId: socket.id} )
+  })
 })
 
 const port = process.env.PORT || 4000
