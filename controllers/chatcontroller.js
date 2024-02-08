@@ -57,7 +57,11 @@ async function getPreviews(req, res) {
                 const otherParticipantId = chat.participants.find(id => id.toString() !== userId)
                 otherParticipant = await User.findById(otherParticipantId)
             } else {
-                otherParticipant = await GroupInformation.find({chatId: chat._id})
+                const groupInformation = await GroupInformation.findOne({chatId: chat._id})
+                otherParticipant = {
+                    username: groupInformation.groupName,
+                    profileImage: groupInformation?.groupImage
+                }
             }
             return {
                 chatId: chat._id,
