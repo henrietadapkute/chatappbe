@@ -22,10 +22,12 @@ router.get("/user", ensureLoggedIn, (req, res) => {
     });
 });
 
+router.get("/:userId", userProfile.getUserProfile);
+
 // POST /users
 router.post("/", usersCtrl.create);
 router.post("/login", usersCtrl.login);
 
-router.put('/:userId', userProfile.updateUserProfile)
+router.put("/:userId", userProfile.updateUserProfile);
 
 export const userRouter = router;
