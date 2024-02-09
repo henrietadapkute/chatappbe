@@ -18,7 +18,6 @@ async function updateUserProfile(req, res) {
   try {
     const userId = req.params.userId;
     const updatedUserDetails = req.body;
-    console.log(req);
     const user = await User.findByIdAndUpdate(userId, updatedUserDetails, {
       new: true,
     });

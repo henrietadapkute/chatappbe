@@ -29,7 +29,6 @@ async function createChat(req, res) {
 async function getChatsbyUser(req, res) {
   try {
     const user = req.user;
-    console.log(user);
     const chats = await Chat.find({ participants: { $in: [user._id] } });
     res.json(chats);
   } catch (error) {
@@ -51,7 +50,6 @@ async function searchUserbyUsername(req, res) {
   }
 }
 async function getPreviews(req, res) {
-  console.log("test");
   try {
     const userId = req.user._id;
     const chats = await Chat.find({ participants: { $in: [userId] } });
@@ -94,7 +92,7 @@ async function getPreviews(req, res) {
     });
     res.json(previews);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).send("Error fetching chat previews");
   }
 }
@@ -106,12 +104,11 @@ async function getMessages(req, res) {
     const chatId = req.params.chatId;
 
     await Message.updateMany(
-      { chatId: chatId, senderId: { $ne: userId } },
+      { chatId: chatId },
       { $addToSet: { readBy: userId } }
     );
 
     const messages = await Message.find({ chatId: chatId });
-    console.log(chatId, messages);
     res.json(messages);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -127,7 +124,6 @@ async function deleteChat(req, res) {
     const chatId = req.params.chatId;
     const chat = await Chat.findByIdAndDelete(chatId);
     const message = await Message.deleteMany({ chatId: chatId });
-    console.log(chat);
     // const messages = await Message.find({ chatId })
     // console.log(messages)
     // if (!chat) {
