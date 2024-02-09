@@ -4,9 +4,7 @@ import bcrypt from "bcrypt";
 
 async function create(req, res) {
   try {
-    console.log("Hi");
     const user = await User.create(req.body);
-    console.log(user);
     const token = createJWT(user);
     res.status(202).json(token);
   } catch (err) {
@@ -27,7 +25,6 @@ async function login(req, res) {
 }
 
 function checkToken(req, res) {
-  console.log("req.user", req.user);
   res.json(req.exp);
 }
 
