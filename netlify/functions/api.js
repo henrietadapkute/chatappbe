@@ -1,5 +1,4 @@
 import express, { Router } from 'express'
-import path from 'path'
 import 'dotenv/config'
 import cors from 'cors'
 import '../../config/database.js'
@@ -20,7 +19,7 @@ api.use(checkToken)
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: `${process.env.FRONTEND}`,
     methods: ["GET", "POST"],
   }
 })
