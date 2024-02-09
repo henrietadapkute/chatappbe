@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Router } from 'express'
 import path from 'path'
 import 'dotenv/config'
 import cors from 'cors'
