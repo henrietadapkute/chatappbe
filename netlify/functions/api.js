@@ -9,17 +9,18 @@ import { userRouter } from './routes/api/usersRoute.js'
 import { chatRouter } from './routes/chatsRoute.js'
 import { Server } from 'socket.io'
 import { createServer } from 'http';
+import serverless from 'serverless-http'
 
-const app = express()
-const server = createServer(app)
+const api = express()
+const server = createServer(api)
 
-app.use(cors())
-app.use(bodyParser.json())
-app.use(checkToken)
+api.use(cors())
+api.use(bodyParser.json())
+api.use(checkToken)
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND,
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   }
 })
@@ -43,16 +44,17 @@ io.on("connection", (socket) => {
   })
 })
 
-const port = process.env.PORT || 4000
+const router = Router()
+
 // USERS API
-app.use('/api/users', userRouter)
-app.use('/api/chats', chatRouter)
+router.use('/users', userRouter)
+router.use('/chats', chatRouter)
 
 // app.get('/*', function(req, res) {
 //   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 // }); 
 
-server.listen(port, () => {
-  console.log(`Listening on port: ${port}`)
-});
+api.use('/api/', router)
+
+export const handler = serverless(api)
 
